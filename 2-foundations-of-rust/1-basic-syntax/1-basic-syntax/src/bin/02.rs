@@ -1,13 +1,14 @@
 fn main() {
-    if (bigger(10, 20)) {
+    if bigger(10, 20) {
         println!("10 is bigger than 20");
     } else {
         println!("10 still isn't bigger than 20");
     }
 }
 
-fn bigger(a: i32, b: i32) -> i32 {
+fn bigger(a: i32, b: i32) -> bool {
     // TODO
+    return a > b
 }
 
 #[cfg(test)]
