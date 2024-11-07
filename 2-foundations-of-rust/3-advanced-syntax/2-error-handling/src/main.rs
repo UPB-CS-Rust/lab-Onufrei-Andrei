@@ -24,31 +24,41 @@
 use std::io::{BufRead, self, Write};
 
 #[derive(Debug)]
-enum MyError{ InvalidName,IOError( io::Error),
+enum MyError { InvalidName,IOError( io::Error),
 }
 
-fn get_username( )
-->  String
-{
+fn get_username() -> Result<String, MyError> {
     print!("Username: ");
-    io::stdout().flush();
+    io::stdout().flush().map_err(MyError::IOError)?;
 
     let mut input=String::new();
-    io::stdin().lock().read_line(&mut input); input=input.trim().to_string();
+    io::stdin().lock().read_line(&mut input).map_err(MyError::IOError)?;
+    input=input.trim().to_string();
 
-    for c in input.chars()
-    {
-	if !char::is_alphabetic(c) { panic!("that's not a valid name, try again"); }
+    for c in input.chars() {
+	    if !char::is_alphabetic(c) {
+            return Err(MyError::InvalidName);
+        }
     }
 
-if input.is_empty() {
-panic!("that's not a valid name, try again");
-}
+    if input.is_empty() {
+        return Err(MyError::InvalidName);
+    }
 
-    input
+    Ok(input)
 }
 
 fn main() {
-    let name=get_username();
-    println!("Hello {name}!")
+
+    match get_username() {
+        Ok(name) => {
+            println!("Hello {name}!");
+        }
+        Err(MyError::InvalidName) => {
+            println!("That's not a valid name, try again.");
+        }
+        Err(MyError::IOError(e)) => {
+            println!("An I/O error occurred: {e}");
+        }
+    }
 }
