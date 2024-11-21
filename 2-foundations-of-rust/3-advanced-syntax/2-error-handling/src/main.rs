@@ -49,16 +49,20 @@ fn get_username() -> Result<String, MyError> {
 }
 
 fn main() {
-
-    match get_username() {
-        Ok(name) => {
-            println!("Hello {name}!");
-        }
-        Err(MyError::InvalidName) => {
-            println!("That's not a valid name, try again.");
-        }
-        Err(MyError::IOError(e)) => {
-            println!("An I/O error occurred: {e}");
+    loop {
+        match get_username() {
+            Ok(name) => {
+                println!("Hello {name}!");
+                break;
+            }
+            Err(MyError::InvalidName) => {
+                println!("That's not a valid name, try again.");
+            }
+            Err(MyError::IOError(e)) => {
+                println!("An I/O error occurred: {e}");
+                break;
+            }
         }
     }
+
 }
