@@ -24,19 +24,19 @@
 use std::io::{BufRead, self, Write};
 
 #[derive(Debug)]
-enum MyError { InvalidName,IOError( io::Error),
+enum MyError{ InvalidName,IOError( io::Error),
 }
 
 fn get_username() -> Result<String, MyError> {
     print!("Username: ");
     io::stdout().flush().map_err(MyError::IOError)?;
 
-    let mut input=String::new();
+    let mut input = String::new();
     io::stdin().lock().read_line(&mut input).map_err(MyError::IOError)?;
-    input=input.trim().to_string();
+    input = input.trim().to_string();
 
     for c in input.chars() {
-	    if !char::is_alphabetic(c) {
+        if !char::is_alphabetic(c) {
             return Err(MyError::InvalidName);
         }
     }
@@ -64,5 +64,4 @@ fn main() {
             }
         }
     }
-
 }
